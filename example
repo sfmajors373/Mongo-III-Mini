@@ -1,0 +1,55 @@
+//persisting refs
+constsamuelClemens = new Author({
+  _id: 0,
+  name: 'Samuel Clemens',
+  penname: 'Mark Twain'
+});
+
+samuelClemens.save().exec()
+  .then((author) => {
+    const tomSawyer = new Book({
+      title: 'Tom Sawyer',
+      author: author._id,
+      genre: 'blah'
+    });
+    tomSawyer.save().exec()
+  })
+  .catch((err) => {
+    handleError(err);
+});
+
+//populating documents
+Book.findOne({ title: 'Huckleberry' })
+  //this line will populate the book document's 'author' field
+  // meaning the author will have the full document of the author
+ .populate('author')
+ .exec()
+ .then((book) => {
+ //stuff, stuff 
+  })
+  .catch((err) => {
+    handleError(err);
+});
+
+Book.findOne{( title: 'book title here' })
+  .populate('author', 'name') //Now we'll only return the authors name not whole author schema
+  .exec()
+  .then((book) => {
+  ...
+  })
+  .catch((err) => {
+    handleError(err);
+});
+
+// this would happen inside of POST books route
+samuelClemens.books.push(tomSawyer);
+samuelClemens.save().exec();
+
+Author.findOne({ name: 'Samuel Clemens' })
+  .populate('books')
+  .exec()
+  .then((author) => {
+  ...
+  .catch((err) => {
+    handleError(err);
+});
